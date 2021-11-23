@@ -5,11 +5,14 @@ import "https://deno.land/x/dotenv@v3.0.0/load.ts";
 import { Attachment, Comment, ZdTicket } from "./zdTicket.ts";
 import { basename } from "https://deno.land/std@0.113.0/path/mod.ts";
 import { ensureDir } from "https://deno.land/std@0.113.0/fs/mod.ts";
-import { download } from "https://deno.land/x/download/mod.ts";
+import { Destination, download } from "https://deno.land/x/download/mod.ts";
+import {} from "https://deno.land/x/deno_dirs/mod.ts";
 
 // 1. ensure zd directory exists
 // 2. get list of urls to attachments
 // 3. download them all
+// if they haven't been downloaded already
+// 4. put them in ~/downloads/support/ticketid or somewhere by user request
 
 async function fetchTicket(
   tick: number,
@@ -29,12 +32,24 @@ async function fetchTicket(
   return result;
 }
 
-function fetchAtttachment(ticket: ZdTicket) {
+function getAttachmentUrls(ticket: ZdTicket): string[] {
   const comments = ticket.comments;
-  const attachments = comments.filter((attachment) => attachment.attachments);
+  const attachmentUrls = comments.filter((attachment) =>
+    attachment.attachments.length !== 0
+  ).flatMap((attachment) => attachment.attachments.map((el) => el.content_url));
 
-  console.log(attachments);
-  return attachments;
+  return attachmentUrls;
+}
+
+async function downloadAttachments(tick: number, urls: string[]) {
+  const destDir = `~/Downloads/support/${tick}`;
+  await ensureDir(destDir);
+  const destination: Destination = {
+    dir: destDir,
+  };
+  urls.map(async (x) => {
+    const _fileObj = await download(x, destination);
+  });
 }
 
 await new Command()
@@ -61,7 +76,8 @@ await new Command()
       options.zdUser,
       options.zdApiKey,
     ).then((ticket) => {
-      fetchAtttachment(ticket);
+      const urls = getAttachmentUrls(ticket);
+      downloadAttachments(ticketId, urls);
     });
   })
   .parse(Deno.args);
