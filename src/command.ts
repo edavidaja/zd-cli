@@ -6,7 +6,7 @@ import { Attachment, Comment, ZdTicket } from "./zdTicket.ts";
 import { basename } from "https://deno.land/std@0.113.0/path/mod.ts";
 import { ensureDir } from "https://deno.land/std@0.113.0/fs/mod.ts";
 import { Destination, download } from "https://deno.land/x/download/mod.ts";
-import {} from "https://deno.land/x/deno_dirs/mod.ts";
+import dir from "https://deno.land/x/dir/mod.ts";
 
 // 1. ensure zd directory exists
 // 2. get list of urls to attachments
@@ -42,7 +42,9 @@ function getAttachmentUrls(ticket: ZdTicket): string[] {
 }
 
 async function downloadAttachments(tick: number, urls: string[]) {
-  const destDir = `~/Downloads/support/${tick}`;
+  const downloadDir = dir("download");
+
+  const destDir = `${downloadDir}/support/${tick}`;
   await ensureDir(destDir);
   const destination: Destination = {
     dir: destDir,
