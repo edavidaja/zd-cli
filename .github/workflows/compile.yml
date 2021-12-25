@@ -21,7 +21,7 @@ jobs:
           deno-version: v1.17.0
 
       - name: compile
-        run: deno compile --allow-write --allow-net=zendesk.com --allow-env=ZD_USER,ZD_API_KEY --output zd-${{matrix.target}} --target ${{ matrix.target }} src/command.ts
+        run: deno compile --allow-write --allow-net=zendesk.com --allow-env=ZD_USER,ZD_API_KEY --unstable --output zd-${{matrix.target}} --target ${{ matrix.target }} src/command.ts
       
       - name: release
         uses: softprops/action-gh-release@v1
