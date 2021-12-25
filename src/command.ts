@@ -3,7 +3,6 @@
 import { Command } from "https://deno.land/x/cliffy@v0.20.0/command/mod.ts";
 import "https://deno.land/x/dotenv@v3.0.0/load.ts";
 import { Attachment, Comment, ZdTicket } from "./zdTicket.ts";
-import { basename } from "https://deno.land/std@0.113.0/path/mod.ts";
 import { ensureDir } from "https://deno.land/std@0.113.0/fs/mod.ts";
 import { Destination, download } from "https://deno.land/x/download/mod.ts";
 import dir from "https://deno.land/x/dir/mod.ts";
@@ -43,14 +42,17 @@ function getAttachmentUrls(ticket: ZdTicket): string[] {
 
 async function downloadAttachments(tick: number, urls: string[]) {
   const downloadDir = dir("download");
-
   const destDir = `${downloadDir}/support/${tick}`;
   await ensureDir(destDir);
-  const destination: Destination = {
-    dir: destDir,
-  };
-  urls.map(async (x) => {
-    const _fileObj = await download(x, destination);
+  urls.map(async (url) => {
+    const urlParams = (new URL(url)).searchParams;
+    const filename = urlParams.get("name")?.toString();
+    const destination: Destination = {
+      dir: destDir,
+      file: filename,
+    };
+
+    const _fileObj = await download(url, destination);
   });
 }
 
