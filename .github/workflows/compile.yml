@@ -27,4 +27,6 @@ jobs:
         with:
           files: |
             zd*
+          token: ${{ secrets.GITHUB_TOKEN }}
+
 
