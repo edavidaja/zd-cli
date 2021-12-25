@@ -1,0 +1,30 @@
+name: compile
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target: [x86_64-unknown-linux-gnu, x86_64-pc-windows-msvc, x86_64-apple-darwin, aarch64-apple-darwin]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.17.0
+
+      - name: compile
+        run: deno compile --allow-write --allow-net=zendesk.com --allow-env=ZD_USER,ZD_API_KEY --output zd-${{matrix.target}} --target ${{ matrix.target }} src/command.ts
+      
+      - name: release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            zd*
+
