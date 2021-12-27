@@ -58,7 +58,7 @@ async function downloadAttachments(tick: number, urls: string[]) {
 
 await new Command()
   .name("zd")
-  .version("0.1.2")
+  .version("0.1.3")
   .description("zendesk helpers")
   .command(
     "download <ticketId:integer>",
