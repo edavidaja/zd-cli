@@ -21,14 +21,16 @@ jobs:
           deno-version: v1.17.0
 
       - name: compile
-        run: deno compile --allow-write --allow-net=zendesk.com --allow-env=ZD_USER,ZD_API_KEY --unstable --output zd-${{matrix.target}} --target ${{ matrix.target }} src/command.ts
+        run: deno compile --allow-write --allow-read --allow-net=zendesk.com --allow-env=ZD_USER,ZD_API_KEY --unstable --output zd --target ${{ matrix.target }} src/command.ts
+
+      - name: compress
+        run: zip -r zd-${{matrix.target}}.zip zd*
       
       - name: release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: |
-            zd*
+          files: *.zip
           token: ${{ secrets.GITHUB_TOKEN }}
 
 
