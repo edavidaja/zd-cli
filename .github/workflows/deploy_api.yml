@@ -1,0 +1,22 @@
+name: deploy API
+
+on:
+  push:
+    
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - name: deploy
+        uses: rstudio/actions/connect-publish@main
+        env:
+          CONNECT_ENV_SET_ZD_USER: ${{ secrets.ZD_USER }}
+          CONNECT_ENV_SET_ZD_API_KEY: ${{ secrets.ZD_API_KEY }}
+        with:
+          url: https://${{ secrets.CONNECT_API_KEY }}@connect.rstudioservices.org
+          namespace: edavidaja
+          dir: ./api:/zd
+          require-vanity-path: true
