@@ -594,6 +594,32 @@
         "Built": "R 4.1.0; x86_64-apple-darwin17.0; 2021-10-19 12:06:38 UTC; unix"
       }
     },
+    "rlog": {
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com",
+      "description": {
+        "Package": "rlog",
+        "Title": "A Simple, Opinionated Logging Utility",
+        "Version": "0.1.0",
+        "Authors@R": "\n    person(given = \"Mark\",\n           family = \"Sellors\",\n           role = c(\"aut\", \"cre\"),\n           email = \"rstats@5vcc.com\")",
+        "Description": "A very lightweight package that writes out log messages in an opinionated way.\n  Simpler and lighter than other logging packages, 'rlog' provides a compact feature set that\n  focuses on getting the job done in a Unix-like way.",
+        "URL": "https://github.com/sellorm/rlog",
+        "BugReports": "https://github.com/sellorm/rlog/issues",
+        "License": "MIT + file LICENSE",
+        "Encoding": "UTF-8",
+        "LazyData": "true",
+        "RoxygenNote": "7.1.1",
+        "Suggests": "testthat (>= 3.0.0)",
+        "Config/testthat/edition": "3",
+        "NeedsCompilation": "no",
+        "Packaged": "2021-02-22 15:04:40 UTC; sellorm",
+        "Author": "Mark Sellors [aut, cre]",
+        "Maintainer": "Mark Sellors <rstats@5vcc.com>",
+        "Repository": "CRAN",
+        "Date/Publication": "2021-02-24 09:20:05 UTC",
+        "Built": "R 4.1.0; ; 2021-05-26 09:25:56 UTC; unix"
+      }
+    },
     "sodium": {
       "Source": "CRAN",
       "Repository": "https://cran.rstudio.com",
@@ -758,7 +784,7 @@
   },
   "files": {
     "plumber.R": {
-      "checksum": "46d0d87a2746119bd6230a662bf0c2ed"
+      "checksum": "af12b18c7eae7ef4da3a7313c54d0b2f"
     }
   },
   "users": null

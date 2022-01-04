@@ -7,6 +7,8 @@ getComments <- function(ticket_ids) {
   tix <- ticket_ids
   base_url <- "https://rstudioide.zendesk.com"
 
+  rlog::log_debug(tix)
+
   map2(base_url, tix, ~ {
     request(.x) |>
       req_template("GET /api/v2/tickets/{ticket_id}/comments.json", ticket_id = .y) |>
@@ -15,6 +17,9 @@ getComments <- function(ticket_ids) {
 }
 
 requestAttachmentUrls <- function(reqs) {
+
+  rlog::log_debug(reqs)
+
   reqs |>
     multi_req_perform()
 }
@@ -24,10 +29,16 @@ parseAttachmentRequest <- function(reqs) {
   res <- keep(reqs, ~!inherits(.x, what = "error")) |>
     map(resp_body_json)
 
+  rlog::log_debug(res)
+
+  urls <-
   map_depth(res, 3, "attachments") |>
     map(compact) |>
     map_depth(4, "content_url") |>
     rlang::squash_chr()
+
+  rlog::log_debug(urls)
+  urls
 }
 
 getAttachmentUrls <- compose(
