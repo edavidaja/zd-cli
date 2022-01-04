@@ -3,7 +3,6 @@ library(httr2)
 library(purrr)
 
 getComments <- function(ticket_ids) {
-
   tix <- ticket_ids
   base_url <- "https://rstudioide.zendesk.com"
 
@@ -17,7 +16,6 @@ getComments <- function(ticket_ids) {
 }
 
 requestAttachmentUrls <- function(reqs) {
-
   rlog::log_debug(reqs)
 
   reqs |>
@@ -25,14 +23,13 @@ requestAttachmentUrls <- function(reqs) {
 }
 
 parseAttachmentRequest <- function(reqs) {
-
-  res <- keep(reqs, ~!inherits(.x, what = "error")) |>
+  res <- keep(reqs, ~ !inherits(.x, what = "error")) |>
     map(resp_body_json)
 
   rlog::log_debug(res)
 
   urls <-
-  map_depth(res, 3, "attachments") |>
+    map_depth(res, 3, "attachments") |>
     map(compact) |>
     map_depth(4, "content_url") |>
     rlang::squash_chr()
@@ -46,7 +43,7 @@ getAttachmentUrls <- compose(
   requestAttachmentUrls,
   parseAttachmentRequest,
   .dir = "forward"
-  )
+)
 
 #* @apiTitle zd
 #* @apiDescription authenticated calls to the zendesk api
