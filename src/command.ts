@@ -1,8 +1,6 @@
 #!/usr/bin/env -S deno run
 
 import { Command } from "https://deno.land/x/cliffy@v0.20.0/command/mod.ts";
-import "https://deno.land/x/dotenv@v3.0.0/load.ts";
-import { Attachment, Comment, ZdTicket } from "./zdTicket.ts";
 import { ensureDir } from "https://deno.land/std@0.113.0/fs/mod.ts";
 import { Destination, download } from "https://deno.land/x/download/mod.ts";
 import dir from "https://deno.land/x/dir/mod.ts";
@@ -14,30 +12,21 @@ import dir from "https://deno.land/x/dir/mod.ts";
 // 4. put them in ~/downloads/support/ticketid or somewhere by user request
 
 async function fetchTicket(
-  tick: number,
-  zUser: string,
-  zApiKey: string,
-): Promise<ZdTicket> {
-  const authHeader = "Basic " + btoa(`${zUser}:${zApiKey}`);
+  { tick, connectApiKey }: { tick: number; connectApiKey: string },
+): Promise<string[]> {
+  const authHeader = "Key " + connectApiKey;
 
-  const zUrl =
-    `https://rstudioide.zendesk.com/api/v2/tickets/${tick}/comments.json`;
-
-  const ticket = await fetch(zUrl, {
-    method: "GET",
-    headers: { "Authorization": authHeader },
-  });
+  // todo: the API can accept multiple tickets in one query
+  const ticket = await fetch(
+    "https://connect.rstudioservices.com/edavidaja/zd/tickets?" +
+      new URLSearchParams({ ticket_ids: tick.toString() }),
+    {
+      method: "GET",
+      headers: { "Authorization": authHeader },
+    },
+  );
   const result = await ticket.json();
   return result;
-}
-
-function getAttachmentUrls(ticket: ZdTicket): string[] {
-  const comments = ticket.comments;
-  const attachmentUrls = comments.filter((attachment) =>
-    attachment.attachments.length !== 0
-  ).flatMap((attachment) => attachment.attachments.map((el) => el.content_url));
-
-  return attachmentUrls;
 }
 
 async function downloadAttachments(tick: number, urls: string[]) {
@@ -58,29 +47,21 @@ async function downloadAttachments(tick: number, urls: string[]) {
 
 await new Command()
   .name("zd")
-  .version("0.1.3")
+  .version("0.2.0")
   .description("zendesk helpers")
   .command(
     "download <ticketId:integer>",
     "download all attachments for a zendesk ticket",
   )
-  .env<{ zdUser: string }>(
-    "ZD_USER=<value:string>",
-    "zendesk user",
-    { global: true, required: true },
-  )
-  .env<{ zdApiKey: string }>(
-    "ZD_API_KEY=<value:string>",
-    "zendesk api key",
+  .env<{ connectApiKey: string }>(
+    "CONNECT_API_KEY=<value:string>",
+    "connect api key for rstudioservices",
     { global: true, required: true },
   )
   .action((options, ticketId) => {
     fetchTicket(
-      ticketId,
-      options.zdUser,
-      options.zdApiKey,
-    ).then((ticket) => {
-      const urls = getAttachmentUrls(ticket);
+      { tick: ticketId, connectApiKey: options.connectApiKey },
+    ).then((urls) => {
       downloadAttachments(ticketId, urls);
     });
   })
