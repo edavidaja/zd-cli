@@ -21,7 +21,7 @@ jobs:
           deno-version: v1.17.0
 
       - name: compile
-        run: deno compile --allow-write --allow-read --allow-net=rstudioservices.com --allow-env --unstable --output zd --target ${{ matrix.target }} src/command.ts
+        run: deno compile --allow-write --allow-read --allow-net --allow-env --unstable --output zd --target ${{ matrix.target }} src/command.ts
 
       - name: compress
         run: zip -r zd-${{matrix.target}}.zip zd*
