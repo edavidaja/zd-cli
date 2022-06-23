@@ -51,9 +51,14 @@ async function downloadAttachments(tick: number, urls: string[]) {
   });
 }
 
+async function closeTicket(
+  ticks: [number],
+  connectApiKey: Record<string, unknown>,
+): Promise<void> {}
+
 await new Command()
   .name("zd")
-  .version("0.2.2")
+  .version("0.3.0")
   .description("zendesk helpers")
   .command(
     "download <ticketId:integer>",
@@ -68,5 +73,12 @@ await new Command()
     fetchTicket(ticketId, options).then((urls) => {
       downloadAttachments(ticketId, urls);
     });
+  })
+  .command(
+    "close <ticketId:integer>",
+    "close a ticket",
+  )
+  .action((options, [ticketId]) => {
+    closeTicket(ticketId, options);
   })
   .parse(Deno.args);
