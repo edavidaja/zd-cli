@@ -10,11 +10,11 @@ download all the attachments from a zendesk ticket to
 
 ## use
 
-```
+```shell
 ❯ zd download --help                         
 
   Usage:   zd download <ticketId>
-  Version: 0.2.2                 
+  Version: 0.3.1                 
 
   Description:
 
@@ -26,5 +26,5 @@ download all the attachments from a zendesk ticket to
 
   Environment variables:
 
-    CONNECT_API_KEY  <value>  - connect api key for rstudioservices
+    CONNECT_API_KEY  <value>  - connect api key for connect.posit.it
 ```

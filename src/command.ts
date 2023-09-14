@@ -53,7 +53,7 @@ async function downloadAttachments(tick: number, urls: string[]) {
 
 await new Command()
   .name("zd")
-  .version("0.2.2")
+  .version("0.3.1")
   .description("zendesk helpers")
   .command(
     "download <ticketId:integer>",
@@ -61,7 +61,7 @@ await new Command()
   )
   .env<{ connectApiKey: string }>(
     "CONNECT_API_KEY=<value:string>",
-    "connect api key for rstudioservices",
+    "connect api key for connect.posit.it",
     { global: true, required: true },
   )
   .action((options, ticketId) => {
