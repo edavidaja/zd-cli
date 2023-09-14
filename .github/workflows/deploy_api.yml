@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: deploy
         uses: rstudio/actions/connect-publish@main
@@ -16,7 +16,7 @@ jobs:
           CONNECT_ENV_SET_ZD_USER: ${{ secrets.ZD_USER }}
           CONNECT_ENV_SET_ZD_API_KEY: ${{ secrets.ZD_API_KEY }}
         with:
-          url: https://${{ secrets.CONNECT_API_KEY }}@connect.rstudioservices.com
+          url: https://${{ secrets.CONNECT_API_KEY }}@connect.posit.it
           namespace: edavidaja
           dir: ./api:/zd
           require-vanity-path: true
