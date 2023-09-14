@@ -23,7 +23,7 @@ async function fetchTicket(
   const authHeader = `Key ${apiKey}`;
   // todo: the API can accept multiple tickets in one query
   const ticket = await fetch(
-    "https://connect.rstudioservices.com/edavidaja/zd/tickets?" +
+    "https://connect.posit.it/edavidaja/zd/tickets?" +
       new URLSearchParams({ ticket_ids: tick.toString() }),
     {
       method: "GET",
